@@ -66,10 +66,12 @@ This package will create markers on /visualization_marker topic and show/hide/mo
 The modifed rviz files and launch script can be found here.  
 
 ### Localization, mapping and navigation  
-
-AMCL
+AMCL  
+http://wiki.ros.org/amcl
 
 gmapping
+
+navigation
 
 
 ### Script Files -
