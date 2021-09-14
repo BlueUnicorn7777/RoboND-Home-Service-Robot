@@ -1,32 +1,55 @@
 # RoboND-Home-Service-Robot
+This project demonstrates the use of several ros packages including slam_gmapping , amcl , map_server , turtlebot , turtlebot_interactions , turtlebot_simulator etc to create a simulated home service robot. The home service robot ( turtlebot for this project) will autonomously navigate it’s world and localize itself in the map file. The pick_object node publishes pickup and drop off goal locations to turtlebot robot using move_base server and SimpleActionClient. ROS navigation stack creates a path for turtlebot based on Dijkstra's algorithm, while avoiding obstacles on its path.  
+The final simulation will show -  
+A marker at the pickup zone.  
+Will hide the marker once the robot reaches the pickup zone.  
+Wait 5 seconds to simulate a pickup.  
+Will show the drop off marker at the drop off zone once your robot reaches there.  
 
-To clone and run -
--  git clone git clone https://github.com/BlueUnicorn7777/RoboND-Home-Service-Robot.git
--  cd RoboND-Home-Service-Robot/catkin_ws/src/
--  catkin_init_workspace 
--  cd ..
--  catkin_make
--  source devel/setup.bash
--  source src/scripts/home_service.sh
+
+### Dependencies for Running Locally
+1. Ubuntu 16.04
+2. ROS Kinetic, Gazebo  
+3. Cmake >3.0.2 & g++/gcc, C++11 
+4. Install xterm sudo apt-get install xterm 
+5. Install some dependencies  
+`rosdep -i install gmapping`  
+`rosdep -i install turtlebot_teleop`  
+`rosdep -i install turtlebot_rviz_launchers`    
+`rosdep -i install turtlebot_gazebo`    
+`sudo apt-get install ros-${ROS_DISTRO}-map-server`  
+`sudo apt-get install ros-${ROS_DISTRO}-amcl`  
+`sudo apt-get install ros-${ROS_DISTRO}-move-base `   
+`sudo apt-get install ros-${ROS_DISTRO}-slam-gmapping`  
+
+### To clone and run
+`git clone git clone https://github.com/BlueUnicorn7777/RoboND-Home-Service-Robot.git`  
+`cd RoboND-Home-Service-Robot/catkin_ws/src/`  
+`catkin_init_workspace`   
+`cd ..`  
+`catkin_make`  
+`source devel/setup.bash`  
+`source src/scripts/home_service.sh`  
 
 
 ### ROS Packages used -
-#### slam_gmapping
-* https://github.com/ros-perception/slam_gmapping
-* http://wiki.ros.org/slam_gmapping
-* This package is used create a map of the existing gazebo world file. To test out the features run the catkin_ws/scripts/test_slam.sh script and drive the robot around the world. 
-#### turtlebot
-* https://github.com/turtlebot/turtlebot
-* http://wiki.ros.org/turtlebot
-* This package provides all the basic drivers for running and using a turtlebot.
+#### slam_gmapping  
+This package is used create a map of the existing gazebo world file. To test out the features run the catkin_ws/scripts/test_slam.sh script and drive the robot around the world.  
+https://github.com/ros-perception/slam_gmapping  
+http://wiki.ros.org/slam_gmapping  
+#### turtlebot  
+This package provides all the basic drivers for running and using a turtlebot.  
+https://github.com/turtlebot/turtlebot  
+http://wiki.ros.org/turtlebot  
 #### turtlebot_interactions
-* https://github.com/turtlebot/turtlebot_interactions
-* http://wiki.ros.org/turtlebot_interactions
-* Package supporting user side interactions with the turtlebot.
-#### turtlebot_simulator
-* https://github.com/turtlebot/turtlebot_simulator
-* http://wiki.ros.org/turtlebot_simulator
-* This package contains Launchers for Gazebo simulation of the turtlebot.
+Package supporting user side interactions with the turtlebot.  
+https://github.com/turtlebot/turtlebot_interactions  
+http://wiki.ros.org/turtlebot_interactions  
+#### turtlebot_simulator  
+This package contains Launchers for Gazebo simulation of the turtlebot.  
+https://github.com/turtlebot/turtlebot_simulator  
+http://wiki.ros.org/turtlebot_simulator  
+
 
 ### Project Packages created
 
@@ -40,14 +63,11 @@ ROS navigation stack creates a path for turtlebot based on Dijkstra's algorithm,
 #### add_marker
 This package will create markers in rviz and show/hide/move them to simulate the virtual pick up and dropoff of object by turtlebot.
 The task is to 
-* Publish the marker at the pickup zone
-* Pause 5 seconds
-* Hide the marker
-* Pause 5 seconds
-* Publish the marker at the drop off zone
-*
-The original code can be found in the backup file   add_markers_test.cpp.
-This code is later modifed to read the robot /odom poses and make a decision to show/hide/move the marker based on the robot location.
+Publish the marker at the pickup zone  
+Pause 5 seconds  
+Hide the marker  
+Pause 5 seconds  
+Publish the marker at the drop off zone 
 #### rviz_launcher
 The modifed rviz files and launch script can be found here.
 
