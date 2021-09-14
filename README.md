@@ -55,17 +55,24 @@ The modifed rviz files and launch script can be found here.
 #### launch.sh
 Basic tutorial to create and test the script files.
 #### test_slam.sh
+![mapping and localization](https://github.com/BlueUnicorn7777/RoboND-Home-Service-Robot/blob/main/gif/mapping.gif)
 Script to run the slam_gmapping and create a map of the world by teleoperating the robot around the world. After the map is created save it using  rosrun map_server map_saver <name_of_map>
 This script will spawn turtlebot in the mySmallWorld world file , along with other launch files - gmapping_demo.launch , view_navigation.launch , keyboard_teleop.launch.
-#### test_navigation.sh
+
+#### test_navigation.sh!
+![Navigation](https://github.com/BlueUnicorn7777/RoboND-Home-Service-Robot/blob/main/gif/navigation.gif)
+
 This script will launch the mySmallWorld file along with turtlebot in gazebo. The map created by slam_gmapping is launched in rviz by setting the env variables -
 TURTLEBOT_GAZEBO_WORLD_FILE=$(rospack find world)/mySmallWorld.world and TURTLEBOT_GAZEBO_MAP_FILE=$(rospack find map)/map.yaml. The amcl_demo.launch file will launch the amcl nodes and the navigation and localization can be tested by sending the 2D nav goal using rviz. 
 #### pick_objects.sh
+![pick_objects](https://github.com/BlueUnicorn7777/RoboND-Home-Service-Robot/blob/main/gif/pick_objects.gif)
 Run this script to watch turtlebot autonomously navigate from pickup location to drop off location. This script will launch the following files 
 turtlebot_world.launch , amcl_demo.launch , view_navigation.launch and finally the pick_objects.launch. 
 #### add_markers.sh
-
+![add_markers](https://github.com/BlueUnicorn7777/RoboND-Home-Service-Robot/blob/main/gif/add_markers.gif)
 #### home_service.sh
+![home_service](https://github.com/BlueUnicorn7777/RoboND-Home-Service-Robot/blob/main/gif/home_service.gif)
+
 Run this script as shown above in to Clone and Run section to see the complete simulation for the autonomous pickup and dropoff of the virtual marker object by turtlebot in mySmallWorld.
 This script will lauch following files -
 turtlebot_world.launch ,amcl_demo.launch,view_navigation.launch view_navigation.launch , add_markers and pick_objects.
