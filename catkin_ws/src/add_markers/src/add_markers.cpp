@@ -31,119 +31,84 @@
 // %Tag(INCLUDES)%
 #include <ros/ros.h>
 #include <visualization_msgs/Marker.h>
-#include <geometry_msgs/PoseWithCovariance.h> 
-#include "nav_msgs/Odometry.h"
-#include <cmath>
 
+// %EndTag(INCLUDES)%
 
-bool poseAchieved = false;
-geometry_msgs::Pose goalPose;
-
-void poseCallback(const nav_msgs::Odometry::ConstPtr &msg){
-  const geometry_msgs::Pose p = msg->pose.pose;
-  const float positionErr = sqrt(pow(p.position.x-goalPose.position.x, 2) + pow(p.position.y-goalPose.position.y,2));
-  if(positionErr < 0.3){
-    poseAchieved = true;
-  }else{
-   ROS_INFO("Position Error: %f\n", positionErr);
-  }
-}
-
-visualization_msgs::Marker createMarker(double *goalPos){
-  
-  visualization_msgs::Marker marker;
-  marker.header.frame_id = "map";
-  marker.header.stamp = ros::Time::now();
-  marker.ns = "add_marker";
-  marker.id = 0;
-  marker.type = visualization_msgs::Marker::CUBE;
-  marker.action = visualization_msgs::Marker::ADD;
-  marker.pose.position.x = goalPos[0];
-  marker.pose.position.y = goalPos[1];
-  marker.pose.position.z = goalPos[2];
-  marker.pose.orientation.x = 0;
-  marker.pose.orientation.y = 0;
-  marker.pose.orientation.z = 0;
-  marker.pose.orientation.w = 0;
-  marker.scale.x = 0.2;
-  marker.scale.y = 0.2;
-  marker.scale.z = 0.2;
-  marker.color.r = 1.0f;
-  marker.color.g = 0.0f;
-  marker.color.b = 0.0f;
-  marker.color.a = 1.0;
-  marker.lifetime = ros::Duration();
-  goalPose = marker.pose;
-  return marker;
-}
-
-void publishMarker(ros::NodeHandle &n, visualization_msgs::Marker &marker,bool pickup ){
-
-  poseAchieved = false;
- 
-  ros::Publisher marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 1);
-  while (marker_pub.getNumSubscribers() < 1)
-  {
-    if (!ros::ok())
-    {
-      break;
-    }
-    ROS_WARN_ONCE("Warning: Create a subscriber to the marker");
-    ros::Duration(1).sleep();
-  }
- 
-  ros::Subscriber bot_pose_subscriber = n.subscribe("odom", 1, poseCallback);
-
-  //if(pickup){
-  //ROS_INFO("Publishing pickup marker.");
-  //marker_pub.publish(marker);}
-  
-  while(!poseAchieved && ros::ok()){
-    ros::spinOnce();
-    if(pickup)
-    marker_pub.publish(marker); 
-    ros::Duration(1).sleep();
-  }
-
- if(!pickup){
-  ROS_INFO("Publishing dropoff marker.");
-  marker_pub.publish(marker);}
- else{
- ROS_INFO("deleting pickup marker.");
- marker.action = visualization_msgs::Marker::DELETE;
- marker_pub.publish(marker); 
-}
-
-}
+// %Tag(INIT)%
 
 int main( int argc, char** argv )
 {
   ros::init(argc, argv, "add_markers");
   ros::NodeHandle n;
   ros::Rate r(1);
-
   ros::Publisher marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 1);
- 
- 
+   
   double pickUpGoal[3]  = {2.90, 3.7,0.4};
   double dropOffGoal[3] = {-0.09, -4.31,0.4};
-  
-  ROS_INFO("Publishing pick up marker.");
-  visualization_msgs::Marker marker1 = createMarker(pickUpGoal);
-  publishMarker(n,marker1,true);
 
-  if(poseAchieved){
-    ROS_INFO("Reached pick up pose!");
-  }else{
-    ROS_INFO("Failed to reach the pick up pose.");
+  uint32_t shape = visualization_msgs::Marker::CUBE;
+
+  while (ros::ok())
+  {
+    visualization_msgs::Marker marker;
+    marker.header.frame_id = "map";
+    marker.header.stamp = ros::Time::now();
+    marker.ns = "basic_shapes";
+    marker.id = 0;
+    marker.type = shape;
+    marker.action = visualization_msgs::Marker::ADD;
+    marker.pose.position.x = 0;
+    marker.pose.position.y = 0;
+    marker.pose.position.z = 0;
+    marker.pose.orientation.x = 0.0;
+    marker.pose.orientation.y = 0.0;
+    marker.pose.orientation.z = 0.0;
+    marker.pose.orientation.w = 1.0;
+    marker.scale.x = 0.2;
+    marker.scale.y = 0.2;
+    marker.scale.z = 0.2;
+    marker.color.r = 1.0f;
+    marker.color.g = 0.0f;
+    marker.color.b = 0.0f;
+    marker.color.a = 1.0;
+
+    marker.lifetime = ros::Duration();
+
+    while (marker_pub.getNumSubscribers() < 1)
+    {
+      if (!ros::ok())
+      {
+        return 0;
+      }
+      ROS_WARN_ONCE("Please create a subscriber to the marker");
+      sleep(1);
+    }
+   
+
+    ros::spinOnce();
+    ROS_INFO("Publishing Pickup object");
+    marker.action = visualization_msgs::Marker::ADD;
+    marker.pose.position.x = pickUpGoal[0];
+    marker.pose.position.y = pickUpGoal[1];
+    marker.pose.orientation.w = pickUpGoal[2];
+    marker_pub.publish(marker);
+
+    sleep(5);
+    ROS_INFO("Hiding Pickup object");
+    marker.action = visualization_msgs::Marker::DELETE;
+    marker_pub.publish(marker);
+
+    sleep(5);
+    ROS_INFO("Publishing Dropoff object");
+    marker.action = visualization_msgs::Marker::ADD;
+    marker.pose.position.x = dropOffGoal[0];
+    marker.pose.position.y = dropOffGoal[1];
+    marker.pose.orientation.w = dropOffGoal[2];
+    marker_pub.publish(marker);
+    sleep(5);
+    
+   break;
   }
-
-  ROS_INFO("Picking up object");
-  sleep(5);
-
-  visualization_msgs::Marker marker2 = createMarker(dropOffGoal);
-  publishMarker(n,marker2,false);  
-  ROS_INFO("Task Finished");
 
 }
 
