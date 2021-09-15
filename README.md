@@ -81,8 +81,8 @@ With the help of ROS amcl package we can successfully locate a robot in the worl
 
 Pose or location of robot in the map coordinate frame is represented by it’s 2D x,y coordinates and it’s orientation. amcl maintains a set of poses with associated probabilities , where it assumes the robot might be. As the robot moves , probabilities are recalculated based on movement and sensor measurement data.  The candidates with low probabilities are eliminated and candidates with higher probabilities stick around. The robot is likely located close to pose with highest probability. amcl offers several parameters for fine tuning the localization. We are keeping the default parameters set offered by the amcl_demo.launch for turtlebot.
 #### navigation
-http://wiki.ros.org/navigation?distro=indigo  
-
+http://wiki.ros.org/navigation?distro=indigo    
+nav stack uses path planning algorithms (Dijkstra's algorithm) to generate lowest cost paths to reach goal position while avoiding obstacles.  Given current pose and goal pose , nav stack uses information form map, localization system, sensors, and odometry to generate path and follows the path from the current pose to the goal pose. If the robot gets stuck due to some reason it tries to recover the stuck robot and replan before giving up. Algorithm uses global planner to generate the path and uses local planner based on the sensor data to navigate the robot. The local planner and sensor data helps robot to avoid obstacles that are in the path but may not be represented by the map. Nav stack needs care configuration for a given robot. We are going to use the preconfigured nav stack with turtlebot_navigation.  
 
 Reference -  
 [Ref 1]  
